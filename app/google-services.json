@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "382376415380",
+    "project_id": "somaannotator",
+    "storage_bucket": "somaannotator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382376415380:android:1140399724df455cb8a481",
+        "android_client_info": {
+          "package_name": "com.cyph.somanlpannotator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382376415380-odv974u7425vjoaoeang0a9nt8dlklsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsMeCXvbk9_KR-2pRFGthy5RgvC2YSRvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382376415380-odv974u7425vjoaoeang0a9nt8dlklsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

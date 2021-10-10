@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context=".Activities.WelcomeActivity">
+
+    <include
+        android:id="@+id/welcome_toolbar"
+        layout="@layout/welcome_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/please_enter_your_email"
+        style="@style/CustomTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_20"
+        android:layout_marginLeft="@dimen/default_margin_20"
+        android:layout_marginTop="@dimen/default_margin_20"
+        android:layout_marginEnd="@dimen/default_margin_20"
+        android:layout_marginRight="@dimen/default_margin_20"
+        android:text="@string/please_enter_your_email"
+        android:textSize="@dimen/please_enter_your_email_text_size"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcome_toolbar" />
+
+    <TextView
+        android:id="@+id/please_enter_your_email_detailed_message"
+        style="@style/CustomTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_20"
+        android:layout_marginLeft="@dimen/default_margin_20"
+        android:layout_marginTop="@dimen/default_margin_20"
+        android:layout_marginEnd="@dimen/default_margin_20"
+        android:layout_marginRight="@dimen/default_margin_20"
+        android:text="@string/please_enter_email_detailed_message"
+        android:textSize="@dimen/default_text_size_17"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/please_enter_your_email" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="@dimen/default_margin_20"
+        android:layout_marginTop="@dimen/default_margin_30"
+        android:layout_marginEnd="@dimen/default_margin_20"
+        android:background="@drawable/edit_text_background"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:importantForAutofill="no"
+        style="@style/CustomEditText"
+        app:layout_constraintEnd_toStartOf="@id/send_email"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/send_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/please_enter_your_email_detailed_message" />
+
+    <ImageButton
+        android:id="@+id/send_email"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="@dimen/default_margin_0"
+        android:layout_marginTop="@dimen/default_margin_20"
+        android:layout_marginEnd="@dimen/default_margin_20"
+        android:paddingStart="@dimen/default_margin_5"
+        android:paddingEnd="@dimen/default_margin_0"
+        android:background="@drawable/main_button_background"
+        android:src="@drawable/ic_baseline_send_24"
+        android:contentDescription="@string/enter_email_and_continue"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/please_enter_your_email_detailed_message" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/skip"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="@dimen/default_margin_20"
+        android:layout_marginLeft="@dimen/default_margin_20"
+        android:layout_marginEnd="@dimen/default_margin_20"
+        android:layout_marginRight="@dimen/default_margin_20"
+        android:layout_marginBottom="@dimen/default_margin_20"
+        android:background="@drawable/skip_button_background"
+        android:text="@string/skip"
+        style="@style/CustomSkipButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

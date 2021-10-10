@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SOMANLPAnnotator</string>
+    <string name="please_enter_your_email">Please enter your email</string>
+    <string name="please_enter_email_detailed_message">Please enter your email (preferably, your CypherCrescent email). This will help us better log your annotations.</string>
+    <string name="email">Email</string>
+    <string name="skip">Skip</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="type_your_query_string_below">Type your query string below</string>
+    <string name="query_soma">Query SOMA</string>
+    <string name="query">Query</string>
+    <string name="entities">Entities</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="enter_email_and_continue">Enter email and continue</string>
+    <string name="intent">Intent</string>
+    <string name="log_query_intent_and_entities">Log Query, Intent and Entities</string>
+    <string name="option">Option</string>
+</resources>

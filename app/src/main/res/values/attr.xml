@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="defaultTextColor" format="reference|color" />
+    <attr name="editTextStrokeColor" format="reference|color" />
+    <attr name="editTextBackgroundColor" format="reference|color" />
+    <attr name="mainButtonBackgroundColor" format="reference|color" />
+    <attr name="acceptButtonBackgroundColor" format="reference|color" />
+    <attr name="declineButtonBackgroundColor" format="reference|color" />
+    <attr name="skipButtonStrokeColor" format="reference|color" />
+    <attr name="toolbar_color" format="reference|color" />
+    <attr name="entitiesBackgroundColor" format="reference|color" />
+    <attr name="IntentBackgroundColor" format="reference|color" />
+    <attr name="IntentBackgroundColorSelected" format="reference|color" />
+</resources>
