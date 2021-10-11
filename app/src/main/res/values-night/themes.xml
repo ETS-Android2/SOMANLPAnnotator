@@ -37,6 +37,11 @@
         <item name="android:textColor">?defaultTextColor</item>
     </style>
 
+    <style name="CustomEntitiesTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?defaultTextColor</item>
+        <item name="android:textSize">@dimen/default_text_size_17</item>
+    </style>
+
     <style name="CustomEditText" parent="Widget.AppCompat.EditText">
         <item name="background">@drawable/edit_text_background</item>
         <item name="android:textSize">15sp</item>

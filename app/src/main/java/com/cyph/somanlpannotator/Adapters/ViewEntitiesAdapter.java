@@ -1,6 +1,5 @@
 package com.cyph.somanlpannotator.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +14,12 @@ import com.cyph.somanlpannotator.R;
 import java.util.ArrayList;
 
 /***
- * This adapter class is responsible for 
+ * Adapter class responsible for displaying entities
+ * in the ViewAnnotationActivity
  */
 public class ViewEntitiesAdapter extends RecyclerView.Adapter<ViewEntitiesAdapter.MyViewHolder> {
 
     private final ArrayList<Entity> entityList;
-    private final Context context;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView entity;
@@ -31,9 +30,12 @@ public class ViewEntitiesAdapter extends RecyclerView.Adapter<ViewEntitiesAdapte
         }
     }
 
-    public ViewEntitiesAdapter(ArrayList<Entity> entityList, Context context) {
+    /***
+     * Default constructor for ViewEntitiesAdapter
+     * @param entityList Grabs the list of entities from the calling activity
+     */
+    public ViewEntitiesAdapter(ArrayList<Entity> entityList) {
         this.entityList = entityList;
-        this.context = context;
     }
 
     @NonNull
@@ -49,6 +51,10 @@ public class ViewEntitiesAdapter extends RecyclerView.Adapter<ViewEntitiesAdapte
         holder.entity.setText(entity.getEntity());
     }
 
+    /***
+     * Gets the number of entities for display
+     * @return Number of entities
+     */
     @Override
     public int getItemCount() {
         return entityList.size();

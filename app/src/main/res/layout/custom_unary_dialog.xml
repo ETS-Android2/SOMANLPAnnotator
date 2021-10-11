@@ -6,15 +6,16 @@
     android:background="@drawable/custom_dialog_background">
 
     <ImageView
-        android:id="@+id/dialogimage"
+        android:id="@+id/dialog_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/default_margin_20"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/dialog_message" />
 
     <TextView
-        android:id="@+id/dialogmessage"
+        android:id="@+id/dialog_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin_25"
@@ -38,7 +39,7 @@
         android:weightSum="1">
 
         <Button
-            android:id="@+id/optionone"
+            android:id="@+id/option_one"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
