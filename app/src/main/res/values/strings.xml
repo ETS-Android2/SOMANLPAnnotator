@@ -22,4 +22,5 @@
     <string name="no_named_entities_message">This query has no named entities</string>
     <string name="annotate_entity">Annotate Entity</string>
     <string name="dialog_message">Dialog Message</string>
+    <string name="image_button_content_description_in_view_and_delete_entity_row">Delete entity when making annotations</string>
 </resources>
