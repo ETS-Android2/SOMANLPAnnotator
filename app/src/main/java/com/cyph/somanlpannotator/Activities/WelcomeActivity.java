@@ -5,12 +5,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.cyph.somanlpannotator.HelperMethods.EmailUtility;
 import com.cyph.somanlpannotator.R;
@@ -18,6 +22,7 @@ import com.cyph.somanlpannotator.R;
 public class WelcomeActivity extends AppCompatActivity {
 
     private static final String SHARED_PREFERENCES_EMAIL_KEY = "email";
+    private static final boolean showAnnotateEntityMenuItem = false;
 
     private EditText emailEditText;
     private ImageButton continueImageButton;
@@ -26,6 +31,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        this.invalidateOptionsMenu();
 
         emailEditText = findViewById(R.id.email);
         continueImageButton = findViewById(R.id.send_email);
@@ -80,5 +87,30 @@ public class WelcomeActivity extends AppCompatActivity {
             startActivity(intent);
             finishAffinity();
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.theme_menu, menu);
+        MenuItem annotateEntityMenuItem = menu.findItem(R.id.annotate_entity);
+        annotateEntityMenuItem.setVisible(showAnnotateEntityMenuItem);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.annotate_entity) {
+            return true;
+        } else if (id == R.id.dark_mode){
+            int nightMode = AppCompatDelegate.getDefaultNightMode();
+
+            if (nightMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -23,4 +23,7 @@
     <string name="annotate_entity">Annotate Entity</string>
     <string name="dialog_message">Dialog Message</string>
     <string name="image_button_content_description_in_view_and_delete_entity_row">Delete entity when making annotations</string>
+    <string name="cancel">Cancel</string>
+    <string name="empty_entities_message">You have not annotated any entities for the above query. To create an entity annotation, highlight the text of interest, tap the annotate option on the toolbar and select the desired entity.</string>
+    <string name="entity_not_in_query_string_error_message">Please ensure that your annotated entities exist within the main query string</string>
 </resources>

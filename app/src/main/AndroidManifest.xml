@@ -2,16 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cyph.somanlpannotator">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".Utility.MApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SOMANLPAnnotator">
-        <activity android:name="com.cyph.somanlpannotator.Activities.MakeAnnotationActivity" />
+        <activity android:name="com.cyph.somanlpannotator.Activities.WelcomeActivity" />
         <activity android:name="com.cyph.somanlpannotator.Activities.ViewAnnotationActivity" />
-        <activity android:name="com.cyph.somanlpannotator.Activities.WelcomeActivity">
+        <activity android:name="com.cyph.somanlpannotator.Activities.MakeAnnotationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,11 +1,14 @@
 package com.cyph.somanlpannotator.Adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,9 +59,16 @@ public class SelectIntentAdapter extends RecyclerView.Adapter<SelectIntentAdapte
             selectedIntent = intentList.get(0).getIntent();
         }
 
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.IntentBackgroundColorSelected, typedValue, true);
+        @ColorInt int color = typedValue.data;
+
         if (selectedIntent.equals(intent.getIntent())) {
+            holder.intent.setTextColor(context.getResources().getColor(R.color.white));
             holder.intent.setBackground(ContextCompat.getDrawable(context, R.drawable.intent_background_selected));
         } else {
+            holder.intent.setTextColor(color);
             holder.intent.setBackground(ContextCompat.getDrawable(context, R.drawable.intent_background));
         }
 
@@ -75,5 +85,13 @@ public class SelectIntentAdapter extends RecyclerView.Adapter<SelectIntentAdapte
 
     public String getSelectedIntent() {
         return selectedIntent;
+    }
+
+    public void setSelectedIntent() {
+        this.selectedIntent = intentList.get(0).getIntent();
+    }
+
+    public void setSelectedIntent(String selectedIntent) {
+        this.selectedIntent = selectedIntent;
     }
 }

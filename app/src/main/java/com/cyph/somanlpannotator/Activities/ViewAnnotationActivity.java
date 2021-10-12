@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +40,8 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
 
     private Context context;
     public static final String QUERY_STRING_KEY = "query_string";
+    private static final String SAVED_ENTITY_LIST_KEY = "saved_entity_list_key";
+    private static final boolean showAnnotateEntityMenuItem = false;
 
     private EditText queryEditText;
     private Button queryButton, declineButton, acceptButton;
@@ -62,8 +63,6 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
             getSupportLoaderManager().initLoader(0, null, this);
         }
 
-        MenuItem item = (MenuItem) findViewById(R.id.annotate_entity);
-        item.setVisible(false);
         this.invalidateOptionsMenu();
 
         queryEditText = findViewById(R.id.query);
@@ -76,11 +75,20 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
         progressBar = findViewById(R.id.progress_bar);
 
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(context);
-        flexboxLayoutManager.setFlexDirection(FlexDirection.COLUMN);
-        flexboxLayoutManager.setJustifyContent(JustifyContent.FLEX_END);
+        flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        flexboxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);
         recyclerView.setLayoutManager(flexboxLayoutManager);
 
-        entityList = new ArrayList<>();
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(SAVED_ENTITY_LIST_KEY)) {
+                entityList = savedInstanceState.getParcelableArrayList(SAVED_ENTITY_LIST_KEY);
+            } else {
+                entityList = new ArrayList<>();
+            }
+        } else {
+            entityList = new ArrayList<>();
+        }
+
         viewEntitiesAdapter = new ViewEntitiesAdapter(entityList);
         recyclerView.setAdapter(viewEntitiesAdapter);
 
@@ -198,6 +206,7 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
             }
         } catch (JSONException jsonException) {
             String message = jsonException.getMessage();
+            assert message != null;
             resetViewWithMessage(message);
         }
     }
@@ -229,8 +238,16 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        outState.putParcelableArrayList(SAVED_ENTITY_LIST_KEY, entityList);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.theme_menu, menu);
+        MenuItem annotateEntityMenuItem = menu.findItem(R.id.annotate_entity);
+        annotateEntityMenuItem.setVisible(showAnnotateEntityMenuItem);
         return super.onCreateOptionsMenu(menu);
     }
 

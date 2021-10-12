@@ -47,7 +47,7 @@ public class ViewAndDeleteEntitiesAdapter extends RecyclerView.Adapter<ViewAndDe
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
         EntityModel entityModel = entityModelList.get(position);
 
-        String entityValueString = entityModel.getValue() + "_" + entityModel.getEntity();
+        String entityValueString = entityModel.getValue() + " : " + entityModel.getEntity();
         holder.entity.setText(entityValueString);
 
         holder.cancelButton.setOnClickListener(v -> {

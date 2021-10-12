@@ -7,6 +7,7 @@
     <attr name="acceptButtonBackgroundColor" format="reference|color" />
     <attr name="declineButtonBackgroundColor" format="reference|color" />
     <attr name="skipButtonStrokeColor" format="reference|color" />
+    <attr name="skipButtonBackgroundColor" format="reference|color" />
     <attr name="toolbar_color" format="reference|color" />
     <attr name="entitiesBackgroundColor" format="reference|color" />
     <attr name="IntentBackgroundColor" format="reference|color" />
