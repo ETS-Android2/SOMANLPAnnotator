@@ -64,16 +64,16 @@ public class SelectIntentAdapter extends RecyclerView.Adapter<SelectIntentAdapte
             selectedIntent = intentList.get(0).getIntent();
         }
 
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(R.attr.IntentBackgroundColorSelected, typedValue, true);
-        @ColorInt int color = typedValue.data;
+//        TypedValue typedValue = new TypedValue();
+//        Resources.Theme theme = context.getTheme();
+//        theme.resolveAttribute(R.attr.IntentBackgroundColorSelected, typedValue, true);
+//        @ColorInt int color = typedValue.data;
 
         if (selectedIntent.equals(intent.getIntent())) {
             holder.intent.setTextColor(context.getResources().getColor(R.color.white));
             holder.intent.setBackground(ContextCompat.getDrawable(context, R.drawable.intent_background_selected));
         } else {
-            holder.intent.setTextColor(color);
+            holder.intent.setTextColor(context.getResources().getColor(R.color.black));
             holder.intent.setBackground(ContextCompat.getDrawable(context, R.drawable.intent_background));
         }
 
@@ -101,26 +101,26 @@ public class SelectIntentAdapter extends RecyclerView.Adapter<SelectIntentAdapte
         this.selectedIntent = selectedIntent;
     }
 
-    public void animateTextView(final TextView textView) {
-        ScaleAnimation scaleAnimation = new ScaleAnimation(0.0f, 1.15f, 0.0f, 1.15f,
-                Animation.RELATIVE_TO_SELF, 0.75f, Animation.RELATIVE_TO_SELF, 0.5f);
-        prepareAnimation(scaleAnimation);
-
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
-        prepareAnimation(alphaAnimation);
-
-        AnimationSet animation = new AnimationSet(true);
-        animation.addAnimation(alphaAnimation);
-        animation.addAnimation(scaleAnimation);
-        animation.setDuration(10000);
-        animation.setFillAfter(false);
-
-        textView.startAnimation(animation);
-    }
-
-    private Animation prepareAnimation(Animation animation){
-        animation.setRepeatCount(0);
-        animation.setRepeatMode(Animation.REVERSE);
-        return animation;
-    }
+//    public void animateTextView(final TextView textView) {
+//        ScaleAnimation scaleAnimation = new ScaleAnimation(0.0f, 1.15f, 0.0f, 1.15f,
+//                Animation.RELATIVE_TO_SELF, 0.75f, Animation.RELATIVE_TO_SELF, 0.5f);
+//        prepareAnimation(scaleAnimation);
+//
+//        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+//        prepareAnimation(alphaAnimation);
+//
+//        AnimationSet animation = new AnimationSet(true);
+//        animation.addAnimation(alphaAnimation);
+//        animation.addAnimation(scaleAnimation);
+//        animation.setDuration(10000);
+//        animation.setFillAfter(false);
+//
+//        textView.startAnimation(animation);
+//    }
+//
+//    private Animation prepareAnimation(Animation animation){
+//        animation.setRepeatCount(0);
+//        animation.setRepeatMode(Animation.REVERSE);
+//        return animation;
+//    }
 }

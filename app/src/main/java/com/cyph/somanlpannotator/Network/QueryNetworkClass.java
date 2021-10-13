@@ -6,6 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
+/**
+ * AsyncTaskLoader responsible for making network calls to
+ * http://196.1.184.22:5005/model/parse
+ */
 public class QueryNetworkClass extends AsyncTaskLoader<String> {
     private final String query;
 
@@ -38,7 +42,7 @@ public class QueryNetworkClass extends AsyncTaskLoader<String> {
     }
 
     /**
-     * Starts the async task
+     * Force starts the async task
      */
     @Override
     protected void onStartLoading() {

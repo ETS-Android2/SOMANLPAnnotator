@@ -12,9 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SOMANLPAnnotator">
-        <activity android:name="com.cyph.somanlpannotator.Activities.WelcomeActivity" />
+        <activity android:name="com.cyph.somanlpannotator.Activities.MakeAnnotationActivity" />
         <activity android:name="com.cyph.somanlpannotator.Activities.ViewAnnotationActivity" />
-        <activity android:name="com.cyph.somanlpannotator.Activities.MakeAnnotationActivity">
+        <activity android:name="com.cyph.somanlpannotator.Activities.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

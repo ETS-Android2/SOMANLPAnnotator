@@ -22,9 +22,11 @@
         <item name="skipButtonStrokeColor">#1c1c1e</item>
         <item name="skipButtonBackgroundColor">#1c1c1e</item>
         <item name="toolbar_color">@color/white</item>
-        <item name="entitiesBackgroundColor">#ee5735</item>
-        <item name="IntentBackgroundColor">#e4dcf1</item>
-        <item name="IntentBackgroundColorSelected">#807fce</item>
+        <item name="entitiesBackgroundColor">#5dcf95</item>
+        <item name="IntentBackgroundColor">#f6f1f8</item>
+        <item name="IntentBackgroundColorSelected">#1c1c1e</item>
+<!--        <item name="IntentBackgroundColor">#e4dcf1</item>-->
+<!--        <item name="IntentBackgroundColorSelected">#807fce</item>-->
 
         <!-- Toolbar -->
         <item name="windowActionBar">false</item>
