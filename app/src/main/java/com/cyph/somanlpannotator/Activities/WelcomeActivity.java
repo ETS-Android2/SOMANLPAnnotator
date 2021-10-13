@@ -23,7 +23,10 @@ import com.cyph.somanlpannotator.HelperMethods.ShowDialogWithMessage;
 import com.cyph.somanlpannotator.R;
 
 import java.util.Objects;
-
+/**
+ * This activity provides facility to get user email (or not).
+ * Relevant for logging annotations later
+ */
 public class WelcomeActivity extends AppCompatActivity {
 
     private Context context;
