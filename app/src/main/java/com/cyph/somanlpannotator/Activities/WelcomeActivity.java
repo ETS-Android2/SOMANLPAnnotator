@@ -1,5 +1,6 @@
 package com.cyph.somanlpannotator.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,12 +16,17 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 import com.cyph.somanlpannotator.HelperMethods.EmailUtility;
+import com.cyph.somanlpannotator.HelperMethods.ShowDialogWithMessage;
 import com.cyph.somanlpannotator.R;
+
+import java.util.Objects;
 
 public class WelcomeActivity extends AppCompatActivity {
 
+    private Context context;
     private static final String SHARED_PREFERENCES_EMAIL_KEY = "email";
     private static final boolean showAnnotateEntityMenuItem = false;
 
@@ -32,14 +38,26 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        context = this;
         this.invalidateOptionsMenu();
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
         emailEditText = findViewById(R.id.email);
         continueImageButton = findViewById(R.id.send_email);
         Button skipButton = findViewById(R.id.skip);
 
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+
         SharedPreferences sharedPreferences = this.getSharedPreferences("Soma", MODE_PRIVATE);
-        emailEditText.setText(sharedPreferences.getString(SHARED_PREFERENCES_EMAIL_KEY, ""));
+
+        if (sharedPreferences.contains(SHARED_PREFERENCES_EMAIL_KEY)) {
+            emailEditText.setText(sharedPreferences.getString(SHARED_PREFERENCES_EMAIL_KEY, ""));
+            continueImageButton.setVisibility(View.VISIBLE);
+        } else {
+            emailEditText.setText("");
+            continueImageButton.setVisibility(View.GONE);
+        }
 
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -66,10 +84,12 @@ public class WelcomeActivity extends AppCompatActivity {
             String email = emailEditText.getText().toString();
 
             if (email.equals("")) {
+                ShowDialogWithMessage.showDialogWithMessage(context, getString(R.string.please_enter_your_email));
                 return;
             }
 
             if (!EmailUtility.validateEmail(email)) {
+                ShowDialogWithMessage.showDialogWithMessage(context, getString(R.string.enter_valid_email));
                 return;
             }
 
@@ -83,6 +103,9 @@ public class WelcomeActivity extends AppCompatActivity {
         });
 
         skipButton.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(SHARED_PREFERENCES_EMAIL_KEY);
+            editor.apply();
             Intent intent = new Intent(WelcomeActivity.this, ViewAnnotationActivity.class);
             startActivity(intent);
             finishAffinity();

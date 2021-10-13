@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ViewAnnotationActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
 
@@ -65,6 +67,7 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
 
         this.invalidateOptionsMenu();
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
         queryEditText = findViewById(R.id.query);
         queryButton = findViewById(R.id.query_button);
         declineButton = findViewById(R.id.decline_results);
@@ -73,6 +76,9 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
         entityTextView = findViewById(R.id.entity_label);
         recyclerView = findViewById(R.id.entity_list);
         progressBar = findViewById(R.id.progress_bar);
+
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("View Annotation");
 
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(context);
         flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);

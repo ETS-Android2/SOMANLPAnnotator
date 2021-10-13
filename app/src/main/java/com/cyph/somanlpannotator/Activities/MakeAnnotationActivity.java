@@ -50,10 +50,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * This activity provides facility to annotate a query string and log annotations to a firebase realtime database
+ */
 public class MakeAnnotationActivity extends AppCompatActivity {
     private Context context;
+    // SharedPreference instance stores the email of the annotator with is logged for every annotated query
     private SharedPreferences sharedPreferences;
 
+    // Key to get
     private static final String SHARED_PREFERENCES_EMAIL_KEY = "email";
     private static final String ACTION_ENTITY_CUSTOM_BROADCAST = BuildConfig.APPLICATION_ID + ".ACTION_ENTITY_CUSTOM_BROADCAST";
     private final static String ACTION_EDITTEXT_CUSTOM_BROADCAST = BuildConfig.APPLICATION_ID + ".ACTION_EDITTEXT_CUSTOM_BROADCAST";
@@ -78,11 +83,19 @@ public class MakeAnnotationActivity extends AppCompatActivity {
     private SelectIntentAdapter selectIntentAdapter;
     private ViewAndDeleteEntitiesAdapter viewAndDeleteEntitiesAdapter;
 
+    /**
+     * Initializes the activity and inflates the "activity_make_annotation" layout for MakeAnnotationActivity
+     * @param savedInstanceState Persists the values of "selectedIntent" and "entityModelArrayList" across state
+     *                           changes
+     * @author Otakenne
+     * @since 1
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_annotation);
 
+        // Initialize "context", "firebaseDatabase" and "sharedPreferences"
         context = this;
         firebaseDatabase = FirebaseDatabase.getInstance();
         sharedPreferences = this.getSharedPreferences("Soma", MODE_PRIVATE);
@@ -94,12 +107,16 @@ public class MakeAnnotationActivity extends AppCompatActivity {
 //            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 //        }
 
+        // Get the "queryString" from the calling activity so user doesn't have to reenter it
 //        Bundle bundle = getIntent().getExtras();
         queryString = "What is the gravity of inca"; //bundle.getString(ViewAnnotationActivity.QUERY_STRING_KEY);
 
+        // Initialize the flag the controls the visibility of the AnnotateEntityMenuItem, use invalidateOptionsMenu()
+        // to force re-rendering
         showAnnotateEntityMenuItem = false;
         this.invalidateOptionsMenu();
 
+        // Get a reference to the views in "activity_make_annotation"
         Toolbar toolbar = findViewById(R.id.toolbar);
         RecyclerView intentList = findViewById(R.id.intent_list);
         RecyclerView entityList = findViewById(R.id.entity_list);
@@ -109,29 +126,41 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         emptyEntitiesMessage = findViewById(R.id.empty_entities_message);
         progressBar = findViewById(R.id.progress_bar);
 
+        // Setup the toolbar
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Make Annotation");
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
 
+        // Show "progressBar" until firebase loads the intents and entities
         scrollView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+
+        // Set the "queryString" to the "queryEditText"
         queryEditText.setText(queryString);
 
+        // Create and set the properties of the FlexboxLayoutManager that acts as the LayoutManager for
+        // the "intentList" recyclerView
         FlexboxLayoutManager intentListFlexboxLayoutManager = new FlexboxLayoutManager(context);
         intentListFlexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
         intentListFlexboxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);
         intentList.setLayoutManager(intentListFlexboxLayoutManager);
 
+        // Create and set the properties of the FlexboxLayoutManager that acts as the LayoutManager for
+        // the "entityList" recyclerView
         FlexboxLayoutManager entityListFlexboxLayoutManager = new FlexboxLayoutManager(context);
         entityListFlexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
         entityListFlexboxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);
         entityList.setLayoutManager(entityListFlexboxLayoutManager);
 
+        // Initialize "intentArrayList", "entityArrayList" and "selectIntentAdapter"
+        // Set "selectIntentAdapter" as the adapter for the "intentList" recyclerView
         intentArrayList = new ArrayList<>();
         entityArrayList = new ArrayList<>();
         selectIntentAdapter = new SelectIntentAdapter(intentArrayList, context);
         intentList.setAdapter(selectIntentAdapter);
+
+        // Set the "selectedIntent" variable in "SelectIntentAdapter" with its setter
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(SAVED_SELECTED_INTENT_KEY)) {
                 selectIntentAdapter.setSelectedIntent(savedInstanceState.getString(SAVED_SELECTED_INTENT_KEY));
@@ -192,10 +221,14 @@ public class MakeAnnotationActivity extends AppCompatActivity {
             databaseReference.updateChildren(updateAnnotationMap, (error, ref) -> resetView());
         });
 
+        // Register receivers for local broadcasts
         LocalBroadcastManager.getInstance(context).registerReceiver(mEntityReceiver, new IntentFilter(ACTION_ENTITY_CUSTOM_BROADCAST));
         LocalBroadcastManager.getInstance(context).registerReceiver(mEditTextReceiver, new IntentFilter(ACTION_EDITTEXT_CUSTOM_BROADCAST));
     }
 
+    /**
+     * Receive the LocalBroadcast that is sent when a string is annotated with an entity
+     */
     public BroadcastReceiver mEntityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, android.content.Intent intent) {
@@ -210,13 +243,17 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Receive the LocalBroadcast that is sent when the subclassed EditText (CustomEditText)
+     * spots a text selection change
+     */
     public BroadcastReceiver mEditTextReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, android.content.Intent intent) {
             int startSelection = intent.getIntExtra("selStart", 0);
             int endSelection = intent.getIntExtra("selEnd", 0);
 
-            if (startSelection > 0) {
+            if (startSelection >= 0) {
                 showAnnotateEntityMenuItem = startSelection != endSelection;
             } else {
                 showAnnotateEntityMenuItem = false;
@@ -225,6 +262,11 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Load intents and entities from firebase, dismiss progressBar and show scrollView
+     * @author Otakenne
+     * @since 1
+     */
     private void loadIntentsAndEntitiesFromFirebase() {
         databaseReference = firebaseDatabase.getReference().child("Intents");
         databaseReference.keepSynced(true);
@@ -269,6 +311,9 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Unregister receivers for local broadcasts after activity is destroyed
+     */
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mEntityReceiver);
@@ -276,6 +321,12 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * Persist "selectedIntent" and "entityModelArrayList" across device state changes
+     * @param outState KeyValue pair holding "selectedIntent" and "entityModelArrayList"
+     * @author Otakenne
+     * @since 1
+     */
     @Override
     protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         String selectedIntent = selectIntentAdapter.getSelectedIntent();
@@ -284,6 +335,13 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * Inflates "R.menu.theme_menu"
+     * @param menu Menu instance
+     * @return Boolean from superClass
+     * @author Otakenne
+     * @since 1
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.theme_menu, menu);
@@ -292,6 +350,13 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Defines actions for when each item in the "R.menu.theme_menu"
+     * @param item Menu item
+     * @return Boolean from superClass
+     * @author Otakenne
+     * @since 1
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -347,6 +412,11 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Resets the views in the activity to prepare them for fresh input
+     * @author Otakenne
+     * @since 1
+     */
     private void resetView() {
         queryEditText.setText("");
         selectIntentAdapter.setSelectedIntent();

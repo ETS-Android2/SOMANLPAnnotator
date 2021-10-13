@@ -6,6 +6,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -73,6 +78,7 @@ public class SelectIntentAdapter extends RecyclerView.Adapter<SelectIntentAdapte
         }
 
         holder.view.setOnClickListener(v -> {
+//            animateTextView(holder.intent);
             selectedIntent = intent.getIntent();
             notifyDataSetChanged();
         });
@@ -93,5 +99,28 @@ public class SelectIntentAdapter extends RecyclerView.Adapter<SelectIntentAdapte
 
     public void setSelectedIntent(String selectedIntent) {
         this.selectedIntent = selectedIntent;
+    }
+
+    public void animateTextView(final TextView textView) {
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0.0f, 1.15f, 0.0f, 1.15f,
+                Animation.RELATIVE_TO_SELF, 0.75f, Animation.RELATIVE_TO_SELF, 0.5f);
+        prepareAnimation(scaleAnimation);
+
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+        prepareAnimation(alphaAnimation);
+
+        AnimationSet animation = new AnimationSet(true);
+        animation.addAnimation(alphaAnimation);
+        animation.addAnimation(scaleAnimation);
+        animation.setDuration(10000);
+        animation.setFillAfter(false);
+
+        textView.startAnimation(animation);
+    }
+
+    private Animation prepareAnimation(Animation animation){
+        animation.setRepeatCount(0);
+        animation.setRepeatMode(Animation.REVERSE);
+        return animation;
     }
 }

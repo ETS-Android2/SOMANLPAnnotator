@@ -26,4 +26,5 @@
     <string name="cancel">Cancel</string>
     <string name="empty_entities_message">You have not annotated any entities for the above query. To create an entity annotation, highlight the text of interest, tap the annotate option on the toolbar and select the desired entity.</string>
     <string name="entity_not_in_query_string_error_message">Please ensure that your annotated entities exist within the main query string</string>
+    <string name="enter_valid_email">Please enter a valid email signature</string>
 </resources>
