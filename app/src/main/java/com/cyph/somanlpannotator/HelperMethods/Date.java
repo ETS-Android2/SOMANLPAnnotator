@@ -5,8 +5,7 @@ import java.util.Calendar;
 public class Date {
     public static String getDate(){
         Calendar calendar = Calendar.getInstance();
-        String date = String.valueOf(calendar.get(Calendar.YEAR)) + "/" + Month.MonthBase1(calendar.get(Calendar.MONTH)) + "/" + String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + " " + String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + String.valueOf(calendar.get(Calendar.MINUTE)) + ":" + String.valueOf(calendar.get(Calendar.SECOND)) + ":" + String.valueOf(calendar.get(Calendar.MILLISECOND));
-        return date;
+        return String.valueOf(calendar.get(Calendar.YEAR)) + "/" + Month.MonthBase1(calendar.get(Calendar.MONTH)) + "/" + String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + " " + String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + String.valueOf(calendar.get(Calendar.MINUTE)) + ":" + String.valueOf(calendar.get(Calendar.SECOND)) + ":" + String.valueOf(calendar.get(Calendar.MILLISECOND));
     }
 
     public static String convertToSortableDate(String Date) {

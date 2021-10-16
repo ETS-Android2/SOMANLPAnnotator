@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
 
 import com.cyph.somanlpannotator.Adapters.ViewEntitiesAdapter;
 import com.cyph.somanlpannotator.HelperMethods.ShowDialogWithMessage;
@@ -44,10 +45,12 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
     public static final String QUERY_STRING_KEY = "query_string";
     private static final String SAVED_ENTITY_LIST_KEY = "saved_entity_list_key";
     private static final boolean showAnnotateEntityMenuItem = false;
+    private int loaderID = 0;
+    private boolean hasLoaded = true;
 
     private EditText queryEditText;
     private Button queryButton, declineButton, acceptButton;
-    private TextView intentTextView, entityTextView;
+    private TextView intentLabel, intentTextView, entityLabel;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
 
@@ -67,13 +70,16 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
 
         this.invalidateOptionsMenu();
 
+        Fade fade = new Fade();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         queryEditText = findViewById(R.id.query);
         queryButton = findViewById(R.id.query_button);
         declineButton = findViewById(R.id.decline_results);
         acceptButton = findViewById(R.id.accept_results);
-        intentTextView = findViewById(R.id.intent_label);
-        entityTextView = findViewById(R.id.entity_label);
+        intentLabel = findViewById(R.id.intent_label);
+        intentTextView = findViewById(R.id.intent);
+        entityLabel = findViewById(R.id.entity_label);
         recyclerView = findViewById(R.id.entity_list);
         progressBar = findViewById(R.id.progress_bar);
 
@@ -129,20 +135,21 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
 
             Bundle queryBundle = new Bundle();
             queryBundle.putString(QUERY_STRING_KEY, queryString);
+            hasLoaded = false;
             getSupportLoaderManager().restartLoader(0, queryBundle, ViewAnnotationActivity.this);
         });
 
         declineButton.setOnClickListener(v -> {
             String queryString = queryEditText.getText().toString().trim();
 
+            String message = "";
+            resetViewWithMessage(message);
+
             Bundle bundle = new Bundle();
             bundle.putString(QUERY_STRING_KEY, queryString);
             Intent intent = new Intent(ViewAnnotationActivity.this, MakeAnnotationActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
-
-            String message = "";
-            resetViewWithMessage(message);
         });
 
         acceptButton.setOnClickListener(v -> {
@@ -156,6 +163,7 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
     public Loader<String> onCreateLoader(int id, Bundle args) {
         //Initialize queryString
         String queryString = "";
+        loaderID = id;
 
         if (args != null) {
             //Get queryString from passed in bundle if bundle is not null
@@ -168,6 +176,7 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
+        if (hasLoaded) return;
         try {
             JSONObject jsonObject = new JSONObject(data);
             JSONObject intentObject = jsonObject.getJSONObject("intent");
@@ -178,6 +187,8 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
             JSONArray entitiesArray = jsonObject.getJSONArray("entities");
 
             if (entitiesArray.length() > 0) {
+                entityList.clear();
+                viewEntitiesAdapter.notifyDataSetChanged();
                 for (int i = 0; i < entitiesArray.length(); i++) {
                     JSONObject entityObject = entitiesArray.getJSONObject(i);
                     String value = entityObject.getString("value");
@@ -192,8 +203,9 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
                 progressBar.setVisibility(View.GONE);
                 queryButton.setVisibility(View.GONE);
 
+                intentLabel.setVisibility(View.VISIBLE);
                 intentTextView.setVisibility(View.VISIBLE);
-                entityTextView.setVisibility(View.VISIBLE);
+                entityLabel.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
                 declineButton.setVisibility(View.VISIBLE);
                 acceptButton.setVisibility(View.VISIBLE);
@@ -202,18 +214,21 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
                 progressBar.setVisibility(View.GONE);
                 queryButton.setVisibility(View.GONE);
 
+                intentLabel.setVisibility(View.VISIBLE);
                 intentTextView.setVisibility(View.VISIBLE);
-                entityTextView.setVisibility(View.VISIBLE);
+                entityLabel.setVisibility(View.VISIBLE);
                 declineButton.setVisibility(View.VISIBLE);
                 acceptButton.setVisibility(View.VISIBLE);
 
                 recyclerView.setVisibility(View.GONE);
-                entityTextView.setText(R.string.no_named_entities_message);
+                entityLabel.setText(R.string.no_named_entities_message);
             }
         } catch (JSONException jsonException) {
             String message = jsonException.getMessage();
             assert message != null;
             resetViewWithMessage(message);
+        } finally {
+            hasLoaded = true;
         }
     }
 
@@ -232,8 +247,9 @@ public class ViewAnnotationActivity extends AppCompatActivity implements LoaderM
         queryButton.setEnabled(true);
         queryButton.setVisibility(View.VISIBLE);
 
+        intentLabel.setVisibility(View.GONE);
         intentTextView.setVisibility(View.GONE);
-        entityTextView.setVisibility(View.GONE);
+        entityLabel.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         declineButton.setVisibility(View.GONE);
         acceptButton.setVisibility(View.GONE);

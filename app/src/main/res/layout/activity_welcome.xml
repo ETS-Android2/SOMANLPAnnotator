@@ -95,6 +95,7 @@
         android:layout_marginBottom="@dimen/default_margin_20"
         android:background="@drawable/skip_button_background"
         android:text="@string/skip"
+        android:transitionName="button_shared_element"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -108,8 +108,8 @@ public class MakeAnnotationActivity extends AppCompatActivity {
 //        }
 
         // Get the "queryString" from the calling activity so user doesn't have to reenter it
-//        Bundle bundle = getIntent().getExtras();
-        queryString = "What is the gravity of inca"; //bundle.getString(ViewAnnotationActivity.QUERY_STRING_KEY);
+        Bundle bundle = getIntent().getExtras();
+        queryString = bundle.getString(ViewAnnotationActivity.QUERY_STRING_KEY);
 
         // Initialize the flag the controls the visibility of the AnnotateEntityMenuItem, use invalidateOptionsMenu()
         // to force re-rendering
@@ -167,10 +167,15 @@ public class MakeAnnotationActivity extends AppCompatActivity {
             }
         }
 
+
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(SAVED_ENTITY_MODEL_LIST_KEY)) {
                 entityModelArrayList = savedInstanceState.getParcelableArrayList(SAVED_ENTITY_MODEL_LIST_KEY);
-                emptyEntitiesMessage.setVisibility(View.GONE);
+                if (entityModelArrayList.size() > 0) {
+                    emptyEntitiesMessage.setVisibility(View.GONE);
+                } else {
+                    emptyEntitiesMessage.setVisibility(View.VISIBLE);
+                }
             } else {
                 entityModelArrayList = new ArrayList<>();
                 emptyEntitiesMessage.setVisibility(View.VISIBLE);

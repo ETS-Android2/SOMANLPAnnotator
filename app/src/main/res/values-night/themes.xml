@@ -12,6 +12,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
         <!-- Customize your theme here. -->
+        <!-- Transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
         <!-- Colors -->
         <item name="defaultTextColor">@color/white</item>
         <item name="editTextStrokeColor">#242426</item>

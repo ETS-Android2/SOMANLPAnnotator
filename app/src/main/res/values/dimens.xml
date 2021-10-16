@@ -4,6 +4,8 @@
     <dimen name="button_radius">30dp</dimen>
     <dimen name="edit_text_radius">25dp</dimen>
     <dimen name="text_field_radius">10dp</dimen>
+    <dimen name="default_margin_50">50dp</dimen>
+    <dimen name="default_margin_45">45dp</dimen>
     <dimen name="default_margin_40">40dp</dimen>
     <dimen name="default_margin_35">35dp</dimen>
     <dimen name="default_margin_30">30dp</dimen>
