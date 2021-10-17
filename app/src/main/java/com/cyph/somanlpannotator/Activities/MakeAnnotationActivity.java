@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -23,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.cyph.somanlpannotator.Adapters.SelectIntentAdapter;
 import com.cyph.somanlpannotator.Adapters.ViewAndDeleteEntitiesAdapter;
 import com.cyph.somanlpannotator.Adapters.ViewEntitiesForAlertDialogAdapter;
@@ -35,6 +39,7 @@ import com.cyph.somanlpannotator.Models.Entity;
 import com.cyph.somanlpannotator.Models.EntityModel;
 import com.cyph.somanlpannotator.Models.Intent;
 import com.cyph.somanlpannotator.R;
+import com.cyph.somanlpannotator.Utility.CustomProgressDialog;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
@@ -65,8 +70,9 @@ public class MakeAnnotationActivity extends AppCompatActivity {
     private static final String SAVED_SELECTED_INTENT_KEY = "saved_selected_intent_key";
     private static final String SAVED_ENTITY_MODEL_LIST_KEY = "saved_entity_model_list_key";
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private CustomProgressDialog customProgressDialog;
 
     private String queryString = "";
     private EntityModel entityModel;
@@ -77,8 +83,10 @@ public class MakeAnnotationActivity extends AppCompatActivity {
 
     private ScrollView scrollView;
     private CustomEditText queryEditText;
-    private TextView emptyEntitiesMessage;
-    private ProgressBar progressBar;
+    private TextView typeYourQuery, intentLabel, entityLabel, emptyEntitiesMessage;
+    private RecyclerView intentList, entityList;
+    private Button logAnnotation;
+    private LottieAnimationView progressBar;
 
     private SelectIntentAdapter selectIntentAdapter;
     private ViewAndDeleteEntitiesAdapter viewAndDeleteEntitiesAdapter;
@@ -100,6 +108,9 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         sharedPreferences = this.getSharedPreferences("Soma", MODE_PRIVATE);
 
+        // Initialize the progressDialog
+        customProgressDialog = new CustomProgressDialog(context);
+
 //        int nightMode = AppCompatDelegate.getDefaultNightMode();
 //        if (nightMode == AppCompatDelegate.MODE_NIGHT_YES) {
 //            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -118,9 +129,12 @@ public class MakeAnnotationActivity extends AppCompatActivity {
 
         // Get a reference to the views in "activity_make_annotation"
         Toolbar toolbar = findViewById(R.id.toolbar);
-        RecyclerView intentList = findViewById(R.id.intent_list);
-        RecyclerView entityList = findViewById(R.id.entity_list);
-        Button logAnnotation = findViewById(R.id.log_annotation);
+        typeYourQuery = findViewById(R.id.type_your_query);
+        intentLabel = findViewById(R.id.intent_label);
+        intentList = findViewById(R.id.intent_list);
+        entityLabel = findViewById(R.id.entity_label);
+        entityList = findViewById(R.id.entity_list);
+        logAnnotation = findViewById(R.id.log_annotation);
         scrollView = findViewById(R.id.scroll_view);
         queryEditText = findViewById(R.id.query);
         emptyEntitiesMessage = findViewById(R.id.empty_entities_message);
@@ -167,7 +181,6 @@ public class MakeAnnotationActivity extends AppCompatActivity {
             }
         }
 
-
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(SAVED_ENTITY_MODEL_LIST_KEY)) {
                 entityModelArrayList = savedInstanceState.getParcelableArrayList(SAVED_ENTITY_MODEL_LIST_KEY);
@@ -191,24 +204,43 @@ public class MakeAnnotationActivity extends AppCompatActivity {
         loadIntentsAndEntitiesFromFirebase();
 
         logAnnotation.setOnClickListener(v -> {
+            logAnnotation.setEnabled(false);
             queryString = Objects.requireNonNull(queryEditText.getText()).toString().trim();
 
+            // Validate the query
             if (queryString.equals("")) {
                 String message = getString(R.string.empty_string_to_parse_error_message);
                 ShowDialogWithMessage.showDialogWithMessage(context, message);
                 return;
             }
 
+            // Show the progressDialog
+            customProgressDialog.show();
+
+            // Get the selected intent
             String selectedIntent = selectIntentAdapter.getSelectedIntent();
+
+            // Get stored email from sharedPreferences
             String email = sharedPreferences.getString(SHARED_PREFERENCES_EMAIL_KEY, "");
+
+            // Get the current date and time
             String date = Date.getDate();
+
+            // Convert the current date and time to sortable forms
             String sortableDate = Date.convertToSortableDate(date);
+
+            // Create an "Annotation" instance/object to push to firebase
             Annotation annotation = new Annotation(selectedIntent, email, queryString, date, sortableDate);
 
             String pushKey = firebaseDatabase.getReference().child("Annotations").push().getKey();
             HashMap<String, Object> updateAnnotationMap = new HashMap<>();
             updateAnnotationMap.put("Annotation/" + pushKey, annotation);
-            updateAnnotationMap.put("Emails/" + email + "/" + pushKey, true);
+
+            if (!email.isEmpty()) {
+                updateAnnotationMap.put("Emails/" + email + "/" + pushKey, true);
+            } else {
+                updateAnnotationMap.put("Emails/No Email/" + pushKey, true);
+            }
 
             for (EntityModel entityModel: entityModelArrayList) {
                 if (!queryString.contains(entityModel.getValue())) {
@@ -298,8 +330,7 @@ public class MakeAnnotationActivity extends AppCompatActivity {
                             }
                         }
 
-                        scrollView.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                        animateViewsIn();
                     }
 
                     @Override
@@ -314,6 +345,55 @@ public class MakeAnnotationActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    /**
+     * Animates the views in "activity_make_annotation" and makes them visible
+     * @author Otakenne
+     * @since 1
+     */
+    private void animateViewsIn() {
+        progressBar.setVisibility(View.GONE);
+        scrollView.setVisibility(View.VISIBLE);
+        TranslateAnimation animate = new TranslateAnimation(0, 0, 50, 0);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+        AnimationSet animation = new AnimationSet(true);
+        animation.addAnimation(animate);
+        animation.addAnimation(alphaAnimation);
+        animation.setStartOffset(100);
+        animation.setDuration(300);
+        typeYourQuery.startAnimation(animation);
+        queryEditText.startAnimation(animation);
+
+        TranslateAnimation animate2 = new TranslateAnimation(0, 0, 50, 0);
+        AlphaAnimation alphaAnimation2 = new AlphaAnimation(0.0f, 1.0f);
+        AnimationSet animation2 = new AnimationSet(true);
+        animation2.addAnimation(animate2);
+        animation2.addAnimation(alphaAnimation2);
+        animation2.setStartOffset(400);
+        animation2.setDuration(300);
+        intentLabel.startAnimation(animation2);
+        intentList.startAnimation(animation2);
+
+        TranslateAnimation animate3 = new TranslateAnimation(0, 0, 50, 0);
+        AlphaAnimation alphaAnimation3 = new AlphaAnimation(0.0f, 1.0f);
+        AnimationSet animation3 = new AnimationSet(true);
+        animation3.addAnimation(animate3);
+        animation3.addAnimation(alphaAnimation3);
+        animation3.setStartOffset(700);
+        animation3.setDuration(300);
+        entityLabel.startAnimation(animation3);
+        entityList.startAnimation(animation3);
+        emptyEntitiesMessage.startAnimation(animation3);
+
+        TranslateAnimation animate4 = new TranslateAnimation(0, 0, 50, 0);
+        AlphaAnimation alphaAnimation4 = new AlphaAnimation(0.0f, 1.0f);
+        AnimationSet animation4 = new AnimationSet(true);
+        animation4.addAnimation(animate4);
+        animation4.addAnimation(alphaAnimation4);
+        animation4.setStartOffset(1000);
+        animation4.setDuration(300);
+        logAnnotation.startAnimation(animation4);
     }
 
     /**
@@ -423,10 +503,13 @@ public class MakeAnnotationActivity extends AppCompatActivity {
      * @since 1
      */
     private void resetView() {
+        logAnnotation.setEnabled(false);
         queryEditText.setText("");
         selectIntentAdapter.setSelectedIntent();
+        selectIntentAdapter.notifyDataSetChanged();
         emptyEntitiesMessage.setVisibility(View.VISIBLE);
         entityModelArrayList.clear();
         viewAndDeleteEntitiesAdapter.notifyDataSetChanged();
+        customProgressDialog.dismiss();
     }
 }

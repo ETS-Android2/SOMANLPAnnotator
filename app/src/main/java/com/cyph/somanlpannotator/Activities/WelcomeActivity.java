@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.cyph.somanlpannotator.HelperMethods.EmailUtility;
 import com.cyph.somanlpannotator.HelperMethods.ShowDialogWithMessage;
@@ -57,6 +59,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Get a reference to the views in "activity_welcome"
         Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView pleaseEnterYourEmailDetailedMessage = findViewById(R.id.please_enter_your_email_detailed_message);
         emailEditText = findViewById(R.id.email);
         continueImageButton = findViewById(R.id.send_email);
         Button skipButton = findViewById(R.id.skip);
@@ -115,10 +118,19 @@ public class WelcomeActivity extends AppCompatActivity {
             editor.putString(SHARED_PREFERENCES_EMAIL_KEY, email);
             editor.apply();
 
-            // Start new activity
+            // Create explicit intent
             Intent intent = new Intent(WelcomeActivity.this, ViewAnnotationActivity.class);
+
+            // Animate with shared element transitions
+            Pair<View, String> textViewTransition = Pair.create(pleaseEnterYourEmailDetailedMessage, "text_view_shared_element");
+            Pair<View, String> editTextTransition = Pair.create(emailEditText, "edit_text_shared_element");
+            Pair<View, String> buttonTransition = Pair.create(skipButton, "button_shared_element");
+            ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                    textViewTransition, editTextTransition, buttonTransition);
+            startActivity(intent, activityOptionsCompat.toBundle());
+
+            // Start new activity
             startActivity(intent);
-            finishAffinity();
         });
 
         skipButton.setOnClickListener(v -> {
@@ -127,16 +139,28 @@ public class WelcomeActivity extends AppCompatActivity {
             editor.remove(SHARED_PREFERENCES_EMAIL_KEY);
             editor.apply();
 
-
-
+            // Create explicit intent
             Intent intent = new Intent(WelcomeActivity.this, ViewAnnotationActivity.class);
+
+            // Animate with shared element transitions
+            Pair<View, String> textViewTransition = Pair.create(pleaseEnterYourEmailDetailedMessage, "text_view_shared_element");
+            Pair<View, String> editTextTransition = Pair.create(emailEditText, "edit_text_shared_element");
+            Pair<View, String> buttonTransition = Pair.create(skipButton, "button_shared_element");
             ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
-                    skipButton, "button_shared_element");
+                    textViewTransition, editTextTransition, buttonTransition);
+
+            // Start new activity
             startActivity(intent, activityOptionsCompat.toBundle());
-            finishAffinity();
         });
     }
 
+    /**
+     * Inflates "R.menu.theme_menu"
+     * @param menu Menu instance
+     * @return Boolean from superClass
+     * @author Otakenne
+     * @since 1
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.theme_menu, menu);
@@ -145,6 +169,13 @@ public class WelcomeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Defines actions for when each item in the "R.menu.theme_menu"
+     * @param item Menu item
+     * @return Boolean from superClass
+     * @author Otakenne
+     * @since 1
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -153,6 +184,7 @@ public class WelcomeActivity extends AppCompatActivity {
         } else if (id == R.id.dark_mode){
             int nightMode = AppCompatDelegate.getDefaultNightMode();
 
+            // if "night mode" is active, set to day and vice versa
             if (nightMode == AppCompatDelegate.MODE_NIGHT_YES) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             } else {

@@ -1,7 +1,17 @@
 package com.cyph.somanlpannotator.HelperMethods;
 
+/**
+ * Contains helper functions to allow for month related operations
+ * @author Otakenne
+ * @since 1
+ */
 public class Month {
-    public static String Month(int val){
+    /**
+     * Converts the index of a month to the month's name
+     * @param val Index of the month
+     * @return Month's name e.g. January
+     */
+    public static String getMonthName(int val){
         switch (val) {
             case 0:
                 return "January";
@@ -31,7 +41,12 @@ public class Month {
         return "";
     }
 
-    public static String MonthBase1(int val){
+    /**
+     * Re-bases the index of a month from 0 based to 1 based
+     * @param val 0 based index
+     * @return 1 based index
+     */
+    public static String rebaseMonthIndex(int val){
         return String.valueOf(val + 1);
     }
 }

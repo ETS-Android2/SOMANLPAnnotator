@@ -18,7 +18,7 @@
     <string name="ok">OK</string>
     <string name="network_error_message">This procedure makes a network call, turn on your internet or connect your device to a wi-fi network to continue.</string>
     <string name="empty_string_to_parse_error_message">Please enter a query for SOMA\'s API to parse</string>
-    <string name="intent_prefix_for_view_annotation">\"Intent: \"</string>
+    <string name="intent_prefix_for_view_annotation">Intent - </string>
     <string name="no_named_entities_message">This query has no named entities</string>
     <string name="annotate_entity">Annotate Entity</string>
     <string name="dialog_message">Dialog Message</string>

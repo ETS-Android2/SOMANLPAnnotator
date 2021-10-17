@@ -2,6 +2,7 @@ package com.cyph.somanlpannotator.Utility;
 
 import android.app.Application;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
@@ -18,6 +19,7 @@ public class MApplication extends Application {
 
         // Allows firebase to persist results from remote queries (allows
         // application to work offline)
+        FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

@@ -41,6 +41,7 @@
                 android:layout_marginRight="@dimen/default_margin_20"
                 android:text="@string/type_your_query_string_below"
                 android:textSize="@dimen/default_text_size_25"
+                android:transitionName="text_view_shared_element"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -62,6 +63,7 @@
                 android:hint="@string/query_soma"
                 android:background="@drawable/edit_text_background_multiline"
                 android:importantForAutofill="no"
+                android:transitionName="edit_text_shared_element"
                 style="@style/CustomEditText"
                 app:layout_constraintTop_toBottomOf="@id/type_your_query"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -69,17 +71,22 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <ProgressBar
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/progress_bar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
                 android:layout_marginTop="@dimen/default_margin_20"
-                app:layout_constraintLeft_toLeftOf="parent"
+
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/nlu_annotator_loader"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/query"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toBottomOf="@id/query"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/query_button"

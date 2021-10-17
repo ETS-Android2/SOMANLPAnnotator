@@ -33,7 +33,13 @@ public class CustomEditText extends AppCompatEditText {
         super(context, attrs, defStyleAttr);
     }
 
-
+    /**
+     * Overrides the "onSelectionChanged" method of the EditText class and
+     * and broadcasts the "selStart" and selEnd positions to receivers
+     * within the application
+     * @param selStart Start position of selection
+     * @param selEnd End position of selection
+     */
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
         Intent entityIntent = new Intent(ACTION_EDITTEXT_CUSTOM_BROADCAST);
