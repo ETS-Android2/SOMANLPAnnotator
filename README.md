@@ -1,5 +1,5 @@
 # SOMANLPAnnotator 
-SOMANLPAnnotator is an open source application designed to allow easy language annotation for a RASA NLP model. It also allows the testing of the currently uploaded model by parsing a query string and returning an intent and a list of entities present in the query.
+SOMANLPAnnotator is an Android application designed to allow for easy language annotation of a RASA NLP model. It also allows the testing of the currently uploaded model by parsing a query string and returning an intent and a list of entities present in the query.
 
 ## Features
 - Light/dark mode toggle
