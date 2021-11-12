@@ -12,10 +12,6 @@ SOMANLPAnnotator is an Android application designed to allow for easy language a
 
 <img src="https://github.com/Otakenne/SOMANLPAnnotator/blob/master/Screenshot_20211111-010916_SOMANLPAnnotator.jpg" width="250">            <img src="https://github.com/Otakenne/SOMANLPAnnotator/blob/master/Screenshot_20211111-011943_SOMANLPAnnotator.jpg" width="250">            <img src="https://github.com/Otakenne/SOMANLPAnnotator/blob/master/Screenshot_20211111-011953_SOMANLPAnnotator.jpg" width="250">
 
-## Badges
-
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
-
 ## Authors
 
 - [@otakenne](https://www.github.com/otakenne)
