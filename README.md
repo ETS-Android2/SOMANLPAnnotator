@@ -7,6 +7,9 @@ SOMANLPAnnotator is an Android application designed to allow for easy language a
 - Model testing
 - Intuitive user interface
 
+## Play Store URL
+https://play.google.com/store/apps/details?id=com.cyph.somanlpannotator
+
 ## Screenshots
 <img src="https://github.com/Otakenne/SOMANLPAnnotator/blob/master/Screenshot_20211111-010908_SOMANLPAnnotator.jpg" width="250">            <img src="https://github.com/Otakenne/SOMANLPAnnotator/blob/master/Screenshot_20211111-011933_SOMANLPAnnotator.jpg" width="250">            <img src="https://github.com/Otakenne/SOMANLPAnnotator/blob/master/Screenshot_20211111-012004_SOMANLPAnnotator.jpg" width="250">
 
